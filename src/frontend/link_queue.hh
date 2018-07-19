@@ -28,6 +28,7 @@ private:
     std::queue<std::string> output_queue_;
 
     std::unique_ptr<std::ofstream> log_;
+    std::unique_ptr<std::ofstream> queue_log_;
     std::unique_ptr<BinnedLiveGraph> throughput_graph_;
     std::unique_ptr<BinnedLiveGraph> delay_graph_;
 
@@ -46,7 +47,7 @@ private:
     void dequeue_packet( void );
 
 public:
-    LinkQueue( const std::string & link_name, const std::string & filename, const std::string & logfile,
+    LinkQueue( const std::string & link_name, const std::string & filename, const std::string & logfile, const std::string & queue_logfile,
                const bool repeat, const bool graph_throughput, const bool graph_delay,
                std::unique_ptr<AbstractPacketQueue> && packet_queue,
                const std::string & command_line );

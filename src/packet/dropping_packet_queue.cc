@@ -16,6 +16,10 @@ DroppingPacketQueue::DroppingPacketQueue( const string & args )
         throw runtime_error( "Dropping queue must have a byte or packet limit." );
     }
 }
+int DroppingPacketQueue::size (void)
+{
+  return internal_queue_.size();
+}
 
 QueuedPacket DroppingPacketQueue::dequeue( void )
 {

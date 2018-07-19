@@ -12,6 +12,7 @@
 using namespace std;
 
 LinkQueue::LinkQueue( const string & link_name, const string & filename, const string & logfile,
+                      const string & queue_logfile,
                       const bool repeat, const bool graph_throughput, const bool graph_delay,
                       unique_ptr<AbstractPacketQueue> && packet_queue,
                       const string & command_line )
@@ -23,6 +24,7 @@ LinkQueue::LinkQueue( const string & link_name, const string & filename, const s
       packet_in_transit_bytes_left_( 0 ),
       output_queue_(),
       log_(),
+      queue_log_(),
       throughput_graph_( nullptr ),
       delay_graph_( nullptr ),
       repeat_( repeat ),
@@ -63,12 +65,23 @@ LinkQueue::LinkQueue( const string & link_name, const string & filename, const s
         throw runtime_error( filename + ": trace must last for a nonzero amount of time" );
     }
 
+    /* open queue logfile if called for */
+    if (not queue_logfile.empty() ) {
+      queue_log_.reset(new ofstream( queue_logfile ));
+      if (not queue_log_->good() ) {
+          throw runtime_error( queue_logfile + ": error opening for writing" );
+      }
+
+      *queue_log_ << "Queue Sizes" << endl;
+
+    }
     /* open logfile if called for */
     if ( not logfile.empty() ) {
         log_.reset( new ofstream( logfile ) );
         if ( not log_->good() ) {
             throw runtime_error( logfile + ": error opening for writing" );
         }
+        *log_ << "# queue " <<  queue_logfile << endl;
 
         *log_ << "# mahimahi mm-link (" << link_name << ") [" << filename << "] > " << logfile << endl;
         *log_ << "# command line: " << command_line << endl;
@@ -121,6 +134,10 @@ void LinkQueue::record_departure_opportunity( void )
     /* log the delivery opportunity */
     if ( log_ ) {
         *log_ << next_delivery_time() << " # " << PACKET_SIZE << endl;
+    }
+    
+    if (queue_log_) {
+        *queue_log_ << next_delivery_time() << " # " << (*packet_queue_).size() << endl;
     }
 
     /* meter the delivery opportunity */

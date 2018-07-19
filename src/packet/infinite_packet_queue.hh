@@ -23,6 +23,10 @@ public:
         }
     }
 
+    int size (void )
+    {
+        return internal_queue_.size();
+    }
     void enqueue( QueuedPacket && p ) override
     {
         internal_queue_.emplace( std::move( p ) );
