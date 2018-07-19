@@ -18,7 +18,13 @@ DroppingPacketQueue::DroppingPacketQueue( const string & args )
 }
 int DroppingPacketQueue::size (void)
 {
-  return internal_queue_.size();
+  if (packet_limit_) {
+    return size_packets();
+  } else if (byte_limit_ ) {
+    return size_bytes();
+  } else {
+    return internal_queue_.size();
+  }
 }
 
 QueuedPacket DroppingPacketQueue::dequeue( void )
