@@ -24,6 +24,7 @@ void usage_error( const string & program_name )
     cerr << "          --meter-all" << endl;
     cerr << "          --uplink-queue=QUEUE_TYPE --downlink-queue=QUEUE_TYPE" << endl;
     cerr << "          --uplink-queue-args=QUEUE_ARGS --downlink-queue-args=QUEUE_ARGS" << endl;
+    cerr << "          --uplink-queue-log=FILENAME --downlink-queue-log=FILENAME" << endl;
     cerr << endl;
     cerr << "          QUEUE_TYPE = infinite | droptail | drophead | codel | pie" << endl;
     cerr << "          QUEUE_ARGS = \"NAME=NUMBER[, NAME2=NUMBER2, ...]\"" << endl;
@@ -99,12 +100,19 @@ int main( int argc, char *argv[] )
             { "meter-downlink-delay",       no_argument, nullptr, 'y' },
             { "meter-all",                  no_argument, nullptr, 'z' },
             { "uplink-queue",         required_argument, nullptr, 'q' },
+<<<<<<< HEAD
             { "uplink-queue-args",    required_argument, nullptr, 'a' },
+=======
+>>>>>>> Add files to deal with queue size.
             { "downlink-queue",         required_argument, nullptr, 'w' },
             { "downlink-queue-args",  required_argument, nullptr, 'b' },
+            { "downlink-queue-log",  required_argument, nullptr, 'c' },
+
+            { "uplink-queue-log",  required_argument, nullptr, 'e' },
             { 0,                                      0, nullptr, 0 }
         };
 
+        string uplink_queue_logfile, downlink_queue_logfile;
         string uplink_logfile, downlink_logfile;
         bool repeat = true;
         bool meter_uplink = false, meter_downlink = false;
@@ -124,6 +132,12 @@ int main( int argc, char *argv[] )
                 break;
             case 'd':
                 downlink_logfile = optarg;
+                break;
+            case 'e':
+                uplink_queue_logfile = optarg;
+                break;
+            case 'c':
+                downlink_queue_logfile = optarg;
                 break;
             case 'o':
                 repeat = false;
@@ -185,11 +199,11 @@ int main( int argc, char *argv[] )
         PacketShell<LinkQueue> link_shell_app( "link", user_environment );
 
         link_shell_app.start_uplink( "[link] ", command,
-                                     "Uplink", uplink_filename, uplink_logfile, repeat, meter_uplink, meter_uplink_delay,
+                                     "Uplink", uplink_filename, uplink_logfile, uplink_queue_logfile, repeat, meter_uplink, meter_uplink_delay,
                                      get_packet_queue( uplink_queue_type, uplink_queue_args, argv[ 0 ] ),
                                      command_line );
 
-        link_shell_app.start_downlink( "Downlink", downlink_filename, downlink_logfile, repeat, meter_downlink, meter_downlink_delay,
+        link_shell_app.start_downlink( "Downlink", downlink_filename, downlink_logfile, downlink_queue_logfile, repeat, meter_downlink, meter_downlink_delay,
                                        get_packet_queue( downlink_queue_type, downlink_queue_args, argv[ 0 ] ),
                                        command_line );
 

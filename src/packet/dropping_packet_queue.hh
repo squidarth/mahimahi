@@ -35,6 +35,7 @@ protected:
 
 public:
     DroppingPacketQueue( const std::string & args );
+    int size (void)  override;
 
     virtual void enqueue( QueuedPacket && p ) = 0;
 

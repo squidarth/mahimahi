@@ -10,6 +10,8 @@
 class AbstractPacketQueue
 {
 public:
+    virtual int size( void ) = 0;
+
     virtual void enqueue( QueuedPacket && p ) = 0;
 
     virtual QueuedPacket dequeue( void ) = 0;
