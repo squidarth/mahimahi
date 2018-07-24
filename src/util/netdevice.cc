@@ -88,7 +88,7 @@ VirtualEthernetPair::VirtualEthernetPair( const string & outside_name, const str
     name_check( outside_name );
     name_check( inside_name );
 
-    run( { IP, "link", "add", outside_name, "type", "veth", "peer", "name", inside_name } );
+    run( { IP, "link", "add", outside_name, "type", "veth", "peer", "name", inside_name, "txqueuelen", "2000" } );
 }
 
 VirtualEthernetPair::~VirtualEthernetPair()
