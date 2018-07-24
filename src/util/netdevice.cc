@@ -27,7 +27,7 @@ TunDevice::TunDevice( const string & name,
                      [] ( ifreq &ifr ) { ifr.ifr_flags = IFF_TUN; } );
 
     assign_address( name, addr, peer );
-    run({"sudo", "ifconfig ", name , "txqueuelen", "100000"});
+    run({"/sbin/ifconfig", name , "txqueuelen", "100000"});
 }
 
 void interface_ioctl( FileDescriptor & fd, const unsigned long request,
