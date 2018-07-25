@@ -31,7 +31,7 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
     std::default_random_engine generator (0);
     std::uniform_real_distribution<double> distribution (0.0,1.0);
     double threshold = distribution(generator);
-    if (ratio < 0.3) {
+    if (ratio < 0.1) {
       ratio = 0;
     }
 
