@@ -14,7 +14,7 @@
 #include "dropping_packet_queue.hh"
 
 const std::string red_debug_log = "debug_log.log";
-const int QUEUE_DEPTH_WINDOW = 2048;
+const double wq =  0.002;
 /*
    Random Early Detection (RED) AQM Implementation
 */
@@ -24,7 +24,6 @@ private:
     //Configuration parameters
     std::unique_ptr<std::ofstream> drop_log_;
     const static unsigned int PACKET_SIZE = 1504;
-    std::deque<int> queue_depths_;
 
     const std::string & type( void ) const override
     {
@@ -32,7 +31,7 @@ private:
         return type_;
     }
 
-    unsigned int average_queue_depth();
+    double weighted_average_ = 0;
     unsigned int max_queue_depth_packets() const;
 
 public:

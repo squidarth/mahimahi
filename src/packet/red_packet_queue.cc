@@ -4,7 +4,7 @@
 using namespace std;
 
 REDPacketQueue::REDPacketQueue( const string & args)
-  : DroppingPacketQueue(args), drop_log_(), queue_depths_()
+  : DroppingPacketQueue(args), drop_log_()
 {
     drop_log_.reset(new std::ofstream(red_debug_log));
     if (not drop_log_->good()) {
@@ -24,21 +24,10 @@ unsigned int REDPacketQueue::max_queue_depth_packets (void ) const {
   }
 }
 
-unsigned int REDPacketQueue::average_queue_depth(  ) {
-  unsigned int sum = 0;
-  std::for_each(queue_depths_.begin(), queue_depths_.end(), [&sum](int i) {  sum += i; });
-
-  if (queue_depths_.size() > 0) {
-    return sum/queue_depths_.size();
-  } else {
-    return 0;
-  }
-}
-
 void REDPacketQueue::enqueue( QueuedPacket && p )
 {
     auto instantaneous_queue_size = size_packets();
-    auto ratio = (average_queue_depth() * 1.0)/max_queue_depth_packets();
+    auto ratio = (weighted_average_)/max_queue_depth_packets();
     std::default_random_engine generator (0);
     std::uniform_real_distribution<double> distribution (0.0,1.0);
     double threshold = distribution(generator);
@@ -50,9 +39,7 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
         *drop_log_ << p.contents << endl;
     }
 
-    queue_depths_.push_back(instantaneous_queue_size);
-    if (queue_depths_.size() > QUEUE_DEPTH_WINDOW) {
-      queue_depths_.pop_front();
-    }
+    weighted_average_ = (instantaneous_queue_size * wq ) + (1- wq) * weighted_average_;
+
     assert( good() );
 }
