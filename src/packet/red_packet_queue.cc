@@ -33,7 +33,7 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
     double threshold = distribution(generator);
 
      *drop_log_ << "Threshold" << threshold << endl;
-    if ( threshold > ratio && good_with( size_bytes() + p.contents.size(),
+    if ( (threshold > ratio) && good_with( size_bytes() + p.contents.size(),
                     size_packets() + 1 ) ) {
         accept( std::move( p ) );
     } else {
