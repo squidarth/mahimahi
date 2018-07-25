@@ -1,5 +1,5 @@
 #include "red_packet_queue.hh"
-
+#include <math.h>
 using namespace std;
 
 REDPacketQueue::REDPacketQueue( const string & args)
@@ -28,12 +28,11 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
 
     auto instanteous_queue_size = size_packets();
     auto ratio = (instanteous_queue_size * 1.0)/limit_packets();
-    ratio *= ratio;
     std::default_random_engine generator (0);
     std::uniform_real_distribution<double> distribution (0.0,1.0);
     double threshold = distribution(generator);
 
-    if ( (threshold > ratio) && good_with( size_bytes() + p.contents.size(),
+    if ( (threshold > sqrt(ratio)) && good_with( size_bytes() + p.contents.size(),
                     size_packets() + 1 ) ) {
         accept( std::move( p ) );
     } else {
