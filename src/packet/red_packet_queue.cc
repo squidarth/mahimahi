@@ -28,7 +28,11 @@ unsigned int REDPacketQueue::average_queue_depth(  ) {
   unsigned int sum = 0;
   std::for_each(queue_depths_.begin(), queue_depths_.end(), [&sum](int i) {  sum += i; });
 
-  return sum/queue_depths_.size();
+  if (queue_depths_.size() > 0) {
+    return sum/queue_depths_.size();
+  } else {
+    return 0;
+  }
 }
 
 void REDPacketQueue::enqueue( QueuedPacket && p )
