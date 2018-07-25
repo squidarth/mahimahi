@@ -32,19 +32,11 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
     std::uniform_real_distribution<double> distribution (0.0,1.0);
     double threshold = distribution(generator);
 
-     *drop_log_ << "Ratio" << ratio << endl;
-     *drop_log_ << "Threshold" << threshold << endl;
     if ( (threshold > ratio) && good_with( size_bytes() + p.contents.size(),
                     size_packets() + 1 ) ) {
         accept( std::move( p ) );
     } else {
-      if (threshold > ratio) {
-        //*drop_log_ << "QUEUE FULL: ";
         *drop_log_ << p.contents << endl;
-      } else {
-        //*drop_log_ << "PROBABILISTIC DROP: ";
-        *drop_log_ << p.contents << endl;
-      }
     }
 
     assert( good() );
