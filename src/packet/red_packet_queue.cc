@@ -28,6 +28,9 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
 
     auto instanteous_queue_size = size_packets();
     auto ratio = (instanteous_queue_size * 1.0)/limit_packets();
+    if (ratio < 0.4) {
+      ratio = 0;
+    }
     std::default_random_engine generator (0);
     std::uniform_real_distribution<double> distribution (0.0,1.0);
     double threshold = distribution(generator);
