@@ -32,6 +32,7 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
     std::uniform_real_distribution<double> distribution (0.0,1.0);
     double threshold = distribution(generator);
 
+     *drop_log_ << "Ratio" << ratio << endl;
      *drop_log_ << "Threshold" << threshold << endl;
     if ( (threshold > ratio) && good_with( size_bytes() + p.contents.size(),
                     size_packets() + 1 ) ) {
