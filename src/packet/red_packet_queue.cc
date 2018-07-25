@@ -15,9 +15,9 @@ REDPacketQueue::REDPacketQueue( const string & args)
 
 unsigned int REDPacketQueue::limit_packets (void ) const {
   if (packet_limit_) {
-    return size_packets();
+    return packet_limit_;
   } else if (byte_limit_ ) {
-    return size_bytes() / PACKET_SIZE;
+    return byte_limit_ / PACKET_SIZE;
   } else {
       throw runtime_error( "No queue limit provided");
   }
