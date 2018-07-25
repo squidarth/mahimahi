@@ -25,9 +25,10 @@ unsigned int REDPacketQueue::limit_packets (void ) const {
 
 void REDPacketQueue::enqueue( QueuedPacket && p )
 {
-    auto instanteous_queue_size = size_packets();
 
+    auto instanteous_queue_size = size_packets();
     auto ratio = (instanteous_queue_size * 1.0)/limit_packets();
+    ratio *= ratio;
     std::default_random_engine generator (0);
     std::uniform_real_distribution<double> distribution (0.0,1.0);
     double threshold = distribution(generator);
