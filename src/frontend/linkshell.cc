@@ -100,6 +100,7 @@ int main( int argc, char *argv[] )
             { "meter-downlink-delay",       no_argument, nullptr, 'y' },
             { "meter-all",                  no_argument, nullptr, 'z' },
             { "uplink-queue",         required_argument, nullptr, 'q' },
+            { "uplink-queue-args",    required_argument, nullptr, 'a' },
             { "downlink-queue",         required_argument, nullptr, 'w' },
             { "downlink-queue-args",  required_argument, nullptr, 'b' },
             { "downlink-queue-log",  required_argument, nullptr, 'c' },

@@ -4,7 +4,11 @@
 using namespace std;
 
 REDPacketQueue::REDPacketQueue( const string & args)
-  : DroppingPacketQueue(args), drop_log_()
+  : DroppingPacketQueue(args),
+    drop_log_(),
+    wq_(get_arg(args, "wq")),
+    min_thresh_(get_arg(args, "minthresh")),
+    max_thresh_(get_arg(args, "maxthresh"))
 {
     drop_log_.reset(new std::ofstream(red_debug_log));
     if (not drop_log_->good()) {
@@ -31,10 +35,10 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
     std::default_random_engine generator (0);
     std::uniform_real_distribution<double> distribution (0.0,1.0);
     double threshold = distribution(generator);
-    if (ratio > 0.6) {
+    if (ratio > max_thresh_) {
       ratio = 1;
     }
-    if (ratio < 0.1) {
+    if (ratio < min_thresh_) {
       ratio = 0;
     }
 
@@ -45,7 +49,7 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
         *drop_log_ << p.contents << endl;
     }
 
-    weighted_average_ = (instantaneous_queue_size * wq ) + (1- wq) * weighted_average_;
+    weighted_average_ = (instantaneous_queue_size * wq_ ) + (1- wq_) * weighted_average_;
 
     assert( good() );
 }

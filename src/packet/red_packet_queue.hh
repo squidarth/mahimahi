@@ -14,7 +14,6 @@
 #include "dropping_packet_queue.hh"
 
 const std::string red_debug_log = "debug_log.log";
-const double wq =  0.002;
 /*
    Random Early Detection (RED) AQM Implementation
 */
@@ -24,6 +23,7 @@ private:
     //Configuration parameters
     std::unique_ptr<std::ofstream> drop_log_;
     const static unsigned int PACKET_SIZE = 1504;
+    double wq_, min_thresh_, max_thresh_;
 
     const std::string & type( void ) const override
     {
@@ -35,20 +35,8 @@ private:
     unsigned int max_queue_depth_packets() const;
 
 public:
-//    using DroppingPacketQueue::DroppingPacketQueue;
-
     REDPacketQueue( const std::string & args );
     void enqueue( QueuedPacket && p ) override;
-//    void enqueue( QueuedPacket && p ) override
-//    {
-//        if ( good_with( size_bytes() + p.contents.size(),
-//                        size_packets() + 1 ) ) {
-//            accept( std::move( p ) );
-//        }
-//
-//        assert( good() );
-//    }
-
 };
 
 #endif
