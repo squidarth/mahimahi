@@ -19,7 +19,7 @@ unsigned int REDPacketQueue::max_queue_depth_packets (void ) const {
   if (packet_limit_) {
     return packet_limit_;
   } else if (byte_limit_ ) {
-    return byte_limit_ / PACKET_SIZE;
+    return byte_limit_ / 100;
   } else {
       throw runtime_error( "No queue limit provided");
   }
