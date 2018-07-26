@@ -6,7 +6,6 @@
 #include <string>
 #include "util.hh"
 #include <iostream>
-
 #include <fstream>
 #include <memory>
 #include <deque>
@@ -20,12 +19,17 @@
    j
 
 */
+
+const std::string debug_log_red = "debug_log.log";
+
 class REDPacketQueue : public DroppingPacketQueue
 {
 private:
     //Configuration parameters
     const static unsigned int PACKET_SIZE = 1504;
+    std::unique_ptr<std::ofstream> drop_log_;
     double wq_, min_thresh_, max_thresh_;
+    uint64_t time_at_zero_q_;
 
     const std::string & type( void ) const override
     {
@@ -39,6 +43,7 @@ private:
 public:
     REDPacketQueue( const std::string & args );
     void enqueue( QueuedPacket && p ) override;
+    QueuedPacket dequeue( void ) override;
 };
 
 #endif
