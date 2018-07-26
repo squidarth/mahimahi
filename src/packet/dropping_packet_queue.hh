@@ -44,7 +44,9 @@ public:
 
     std::string to_string( void ) const override;
 
+    static std::string parse_number_arg(const std::string & args, const std::string & name, bool isfloat);
     static unsigned int get_arg( const std::string & args, const std::string & name );
+    static double get_float_arg( const std::string & args, const std::string & name );
 };
 
 #endif /* DROPPING_PACKET_QUEUE_HH */ 
