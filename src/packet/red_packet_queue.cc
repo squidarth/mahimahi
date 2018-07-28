@@ -11,20 +11,14 @@ REDPacketQueue::REDPacketQueue( const string & args)
     max_thresh_(get_float_arg(args, "maxthresh")),
     time_at_zero_q_(0)
 {
+  if (packet_limit_ == 0) {
+    throw runtime_error( "RED queue must have packet limit." );
+  }
+
   if ( wq_ == 0.0 || min_thresh_ == 0.0 || max_thresh_ == 0.0 ) {
     throw runtime_error( "RED queue must have wq, minthresh, and maxthresh arguments." );
   }
 
-}
-
-unsigned int REDPacketQueue::max_queue_depth_packets (void ) const {
-  if (packet_limit_) {
-    return packet_limit_;
-  } else if (byte_limit_ ) {
-    return byte_limit_ / PACKET_SIZE;
-  } else {
-      throw runtime_error( "No queue limit provided");
-  }
 }
 
 QueuedPacket REDPacketQueue::dequeue( void )
@@ -51,7 +45,7 @@ void REDPacketQueue::enqueue( QueuedPacket && p )
         weighted_average_ = (instantaneous_queue_size * wq_ ) + (1- wq_) * weighted_average_;
     }
 
-    auto ratio = (weighted_average_)/max_queue_depth_packets();
+    auto ratio = (weighted_average_)/packet_limit_;
     std::default_random_engine generator (0);
     std::uniform_real_distribution<double> distribution (min_thresh_, max_thresh_);
     double threshold = distribution(generator);

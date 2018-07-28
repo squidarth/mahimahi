@@ -112,7 +112,7 @@ string DroppingPacketQueue::parse_number_arg(const string & args, const string &
 
         /* make sure next char is "=" */
         if ( args.substr( offset, 1 ) != "=" ) {
-            throw runtime_error( "could not parse queue arguments: " + args);
+            throw runtime_error( "could not parse queue arguments: " + args );
         }
 
         /* advance by length of "=" */

@@ -99,8 +99,8 @@ int main( int argc, char *argv[] )
             { "meter-downlink-delay",       no_argument, nullptr, 'y' },
             { "meter-all",                  no_argument, nullptr, 'z' },
             { "uplink-queue",         required_argument, nullptr, 'q' },
-            { "uplink-queue-args",    required_argument, nullptr, 'a' },
             { "downlink-queue",         required_argument, nullptr, 'w' },
+            { "uplink-queue-args",    required_argument, nullptr, 'a' },
             { "downlink-queue-args",  required_argument, nullptr, 'b' },
             { 0,                                      0, nullptr, 0 }
         };
