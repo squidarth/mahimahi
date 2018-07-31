@@ -24,10 +24,14 @@ class REDPacketQueue : public DroppingPacketQueue
 {
 private:
     //Configuration parameters
-    const static unsigned int PACKET_SIZE = 1504;
     double wq_, min_thresh_, max_thresh_;
+    uint32_t transmission_time_;
     uint64_t time_at_zero_q_;
-
+    std::default_random_engine prng_;
+    std::uniform_real_distribution<float> drop_dist_;
+    float current_random_val_;
+    uint32_t count_;
+      
     const std::string & type( void ) const override
     {
         static const std::string type_ { "red" };
